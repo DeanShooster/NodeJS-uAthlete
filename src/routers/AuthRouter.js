@@ -2,12 +2,27 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const { registerValidations, loginValidations } = require("../middlewares/validations");
 const { GenericError, errorMessages } = require("../middlewares/ErrorHandler");
+const { auth } = require("../middlewares/authentication");
 
 const routes = require("./config");
 const Athlete = require("../database/model/Athlete");
 const router = express.Router();
 
 //--------------------------------------------------------------- GET REQUESTS --------------------------------------------------------------- //
+
+router.get(`${routes.Auth}/Validation`, auth, async (req, res, next) => {
+  try {
+    const athlete = req.athlete;
+
+    const athleteObject = athlete.toObject();
+    delete athleteObject.password;
+    delete athleteObject._id;
+
+    res.send({ athlete: athleteObject });
+  } catch (error) {
+    next(error);
+  }
+});
 
 //--------------------------------------------------------------- POST REQUESTS --------------------------------------------------------------- //
 
@@ -16,7 +31,7 @@ router.post(`${routes.Auth}/Register`, registerValidations, async (req, res, nex
     const newAthlete = new Athlete(req.newAthlete);
     const token = await newAthlete.generateToken();
 
-    // await newAthlete.save();
+    await newAthlete.save();
 
     const athleteObject = newAthlete.toObject();
     delete athleteObject.password;
@@ -43,6 +58,8 @@ router.post(`${routes.Auth}/Login`, loginValidations, async (req, res, next) => 
     const athleteObject = athlete.toObject();
     delete athleteObject.password;
     delete athleteObject._id;
+
+    console.log(athlete);
 
     res.send({ token, athlete: athleteObject });
   } catch (error) {
