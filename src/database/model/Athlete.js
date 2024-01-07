@@ -40,6 +40,25 @@ const athleteSchema = new mongoose.Schema({
     required: true,
     default: 0,
   },
+  notifications: {
+    isRead: { type: Boolean, default: false },
+    messages: {
+      type: [
+        {
+          title: { type: String },
+          message: { type: String },
+          date: { type: Date },
+        },
+      ],
+      default: [
+        {
+          title: "New Athlete",
+          message: "Welcome to uAthlete! We hope you will enjoy our services and use them in your personal journey.",
+          date: new Date(),
+        },
+      ],
+    },
+  },
   progressionUpdates: [{ type: Date }],
   progress: {
     strength: {

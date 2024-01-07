@@ -36,6 +36,7 @@ router.post(`${routes.Auth}/Register`, registerValidations, async (req, res, nex
     const athleteObject = newAthlete.toObject();
     delete athleteObject.password;
     delete athleteObject._id;
+    delete athleteObject.__v;
 
     res.send({ token, athlete: athleteObject });
   } catch (error) {
@@ -58,6 +59,7 @@ router.post(`${routes.Auth}/Login`, loginValidations, async (req, res, next) => 
     const athleteObject = athlete.toObject();
     delete athleteObject.password;
     delete athleteObject._id;
+    delete athleteObject.__v;
 
     console.log(athlete);
 
