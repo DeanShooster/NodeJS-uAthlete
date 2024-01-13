@@ -61,8 +61,6 @@ router.post(`${routes.Auth}/Login`, loginValidations, async (req, res, next) => 
     delete athleteObject._id;
     delete athleteObject.__v;
 
-    console.log(athlete);
-
     res.send({ token, athlete: athleteObject });
   } catch (error) {
     next(error);
