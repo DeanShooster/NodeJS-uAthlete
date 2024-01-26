@@ -26,10 +26,12 @@ const athleteSchema = new mongoose.Schema({
       type: Boolean,
       required: true,
     },
-    weight: {
-      type: Number,
-      required: true,
-    },
+    weight: [
+      {
+        type: Number,
+        required: true,
+      },
+    ],
     height: {
       type: Number,
       required: true,
