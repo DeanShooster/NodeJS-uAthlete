@@ -1,5 +1,6 @@
 const express = require("express");
 const { auth } = require("../middlewares/authentication");
+const { MaleMetaData, FemaleMetaData, ProMaleMetaData, ProFemaleMetaData } = require("../database/data/metaData");
 
 const routes = require("./config");
 const router = express.Router();
@@ -8,25 +9,10 @@ const router = express.Router();
 
 router.get(`${routes.Athlete}/MetaProData`, auth, async (req, res, next) => {
   try {
-    console.log(req.athlete);
+    const { personalDetails } = req.athlete;
+    const { gender } = personalDetails;
 
-    const metaProData = {
-      athleteData: {
-        strength: 150,
-        endurance: 50,
-        stamina: 100,
-      },
-      metaData: {
-        strength: 150,
-        endurance: 150,
-        stamina: 150,
-      },
-      proData: {
-        strength: 200,
-        endurance: 200,
-        stamina: 200,
-      },
-    };
+    const metaProData = { metaData: gender ? MaleMetaData : FemaleMetaData, proData: gender ? ProMaleMetaData : ProFemaleMetaData };
 
     res.send(metaProData);
   } catch (e) {
